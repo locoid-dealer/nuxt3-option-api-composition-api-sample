@@ -1,14 +1,16 @@
-import type { Ref } from 'vue'
-import { FetchError } from 'ofetch'
+import type { Ref } from "vue";
+import { FetchError } from "ofetch";
 
-export const useFetchErrorHandle = (...errors:Ref<FetchError<any> | null>[])=>{
+export const useFetchErrorHandle = (
+  ...errors: Ref<FetchError<any> | null>[]
+) => {
   errors.forEach((error) => {
-    if(error.value) {
+    if (error.value) {
       throw createError({
-        fatal:true,
+        fatal: true,
         statusCode: error.value?.statusCode,
-        message: error.value?.message
-      })
+        message: error.value?.message,
+      });
     }
-  })
-}
+  });
+};

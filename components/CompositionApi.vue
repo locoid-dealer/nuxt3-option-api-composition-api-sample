@@ -2,11 +2,10 @@
 import { ref } from "vue";
 import { onMounted } from "vue";
 import type { Ref } from "vue";
-import {usePostsFetch} from "../services/client/Post/usePostFetch"
-
+import { usePostsFetch } from "../services/client/Post/usePostFetch";
 
 // 投稿
-const {posts,push, postsCount,fetchPosts } = usePostsFetch()
+const { posts, push, postsCount, fetchPosts } = usePostsFetch();
 
 // mountedフックで代入するどうでもいいやつ
 const mountedValue: Ref<string> = ref("");
@@ -51,6 +50,5 @@ onMounted(() => {
     </div>
     <button @click="fetchPosts()">refresh</button>
     <button @click="push()">push</button>
-    
   </div>
 </template>
