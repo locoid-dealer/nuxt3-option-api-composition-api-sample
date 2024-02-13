@@ -21,7 +21,7 @@ const showPosts = (): void => {
 };
 
 // createdフック
-// inovoyは見ている感じsuspenseではなくlazy(全てがfetchされawaitが完了してから画面が描画されているわけではない).
+// 自社プロダクトは見ている感じsuspenseではなくlazy(全てがfetchされawaitが完了してから画面が描画されているわけではない).
 // awaitにするかは要検討. top level awaitはsuspense modeになる。awaitにしない場合はlazy
 fetchPosts();
 
