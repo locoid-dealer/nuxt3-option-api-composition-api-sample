@@ -2,25 +2,11 @@
 import { ref } from "vue";
 import { onMounted } from "vue";
 import type { Ref } from "vue";
+import {usePostsFetch} from "../services/client/Post/usePostFetch"
 
-type PostType = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
 
 // 投稿
-const posts:Ref<PostType[]> = ref([]);
-const postsCount = computed<number>(() => {
-  return posts.value.length;
-});
-const fetchPosts = async (): Promise<void> => {
-  const { data } = await useFetch("https://jsonplaceholder.typicode.com/posts");
-  // HACK: 型アサーションを利用するのは良くない。
-  // 調べるとuseFetchの型定義は地獄だったので、useFetch用のジェネリクスを用意すると良さそう。
-  posts.value = data.value as PostType[];
-};
+const {posts,push, postsCount,fetchPosts } = usePostsFetch()
 
 // mountedフックで代入するどうでもいいやつ
 const mountedValue: Ref<string> = ref("");
@@ -36,11 +22,17 @@ const showPosts = (): void => {
 };
 
 // createdフック
-await fetchPosts();
+// inovoyは見ている感じsuspenseではなくlazy(全てがfetchされawaitが完了してから画面が描画されているわけではない).
+// awaitにするかは要検討. top level awaitはsuspense modeになる。awaitにしない場合はlazy
+fetchPosts();
 
 onMounted(() => {
   assignDummyDataOnMounted();
 });
+
+// 標準API refreshは使えない。
+// const refresh = ()=> refreshNuxtData('posts')
+// const nuxtData = ()=> useNuxtData('posts')
 </script>
 
 <template>
@@ -57,5 +49,8 @@ onMounted(() => {
         </li>
       </ul>
     </div>
+    <button @click="fetchPosts()">refresh</button>
+    <button @click="push()">push</button>
+    
   </div>
 </template>
